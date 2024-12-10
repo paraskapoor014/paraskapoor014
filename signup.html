@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Signup</h2>
+                        <form>
+                            <div class="form-group">
+                                <label for="signupUsername">Username:</label>
+                                <input type="text" class="form-control" id="signupUsername" placeholder="Enter username">
+                            </div>
+                            <div class="form-group">
+                                <label for="signupPassword">Password:</label>
+                                <input type="password" class="form-control" id="signupPassword" placeholder="Enter password">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-block" onclick="signup()">Signup</button>
+                            <div id="signupMessage" class="text-danger mt-3"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        const employees = [
+            { "id": 1, "name": "Paras", "salary": 50000 },
+            { "id": 2, "name": "Jane Smith", "salary": 60000 },
+            { "id": 3, "name": "Michael Johnson", "salary": 55000 }
+        ];
+
+        let userData = {};
+
+        window.onload = function () {
+            if (localStorage.getItem('userData')) {
+                userData = JSON.parse(localStorage.getItem('userData'));
+            }
+        };
+
+        function signup() {
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const messageElement = document.getElementById('signupMessage');
+
+            if (username && password) {
+                const employee = employees.find(emp => emp.name.toLowerCase() === username.toLowerCase());
+                if (employee) {
+                    if (userData[username]) {
+                        messageElement.textContent = 'Username already exists!';
+                    } else {
+                        userData[username] = { password: password, salary: employee.salary };
+                        localStorage.setItem('userData', JSON.stringify(userData));
+                        messageElement.textContent = 'Signup successful!';
+                        messageElement.classList.replace('text-danger', 'text-success');
+                    }
+                } else {
+                    messageElement.textContent = 'Employee not found!';
+                }
+            } else {
+                messageElement.textContent = 'Please enter a username and password.';
+                messageElement.classList.add('text-danger');
+            }
+        }
+    </script>
+</body>
+
+</html>
